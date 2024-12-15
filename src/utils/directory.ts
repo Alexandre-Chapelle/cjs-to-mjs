@@ -14,15 +14,22 @@ const convertFeatureMapper: Record<
   js: convertToCjs, // TODO: Key should be CJS
 };
 
-async function renameFile(
+async function writeNewContentAndRename(
   filePath: string,
   fileName: string,
   content: string,
   originalContent: string,
   convertTo: SupportedFileExtensions,
-  loggingEnabled: boolean
+  loggingEnabled: boolean,
+  backupsEnabled: boolean
 ): Promise<void> {
   if (content !== originalContent) {
+    if (backupsEnabled) {
+      const backupFilePath = `${filePath}.bak`;
+      await fs.promises.writeFile(backupFilePath, originalContent, "utf-8");
+      if (loggingEnabled) logger.info(`Backup created: ${backupFilePath}`);
+    }
+
     const pathParts = fileName.split(".");
     const fileExt = pathParts.pop()?.toLowerCase() || "";
 
@@ -42,7 +49,8 @@ export async function traverseDirectory(
   dirPath: string,
   loggingEnabled: boolean,
   fileRegex: RegExp,
-  convertTo: SupportedFileExtensions
+  convertTo: SupportedFileExtensions,
+  backupsEnabled: boolean
 ) {
   const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
 
@@ -51,22 +59,29 @@ export async function traverseDirectory(
     const fullPath = path.join(dirPath, entryName);
 
     if (entry.isDirectory()) {
-      await traverseDirectory(fullPath, loggingEnabled, fileRegex, convertTo);
+      await traverseDirectory(
+        fullPath,
+        loggingEnabled,
+        fileRegex,
+        convertTo,
+        backupsEnabled
+      );
     } else if (entry.isFile() && fileRegex.test(entryName)) {
-      if (loggingEnabled) console.log(`Processing file: ${fullPath}`);
+      if (loggingEnabled) logger.info(`Processing file: ${fullPath}`);
 
       try {
         const fileContent = await fs.promises.readFile(fullPath, "utf-8");
         const convertFeature = convertFeatureMapper[convertTo];
         const transformedContent = convertFeature(fileContent);
 
-        renameFile(
+        writeNewContentAndRename(
           fullPath,
           entryName,
           transformedContent,
           fileContent,
           convertTo,
-          loggingEnabled
+          loggingEnabled,
+          backupsEnabled
         );
       } catch (error) {
         if (loggingEnabled)

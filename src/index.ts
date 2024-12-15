@@ -37,7 +37,8 @@ async function start() {
     targetDir,
     loggingEnabled,
     fileRegex,
-    formattedConvertTo
+    formattedConvertTo,
+    backupsEnabled
   );
 
   if (loggingEnabled) logger.success("Conversion completed.");
@@ -48,6 +49,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error("An error occurred:", error);
+  logger.error("An error occurred:", error);
   process.exit(1);
 });
