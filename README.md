@@ -62,6 +62,15 @@ When you run Unimod, it will prompt you with a series of questions to guide the 
 5. **Backup Option**: ```Do you want to create backups for each modified file? (y/N)```
 6. **Enable Logging**: ```Do you want to enable logging? (Y/n)```
 
+### Examples
+- Simple CJS to TS transformation
+#### Before
+![image](https://github.com/user-attachments/assets/9de7c69b-5469-4e5c-8c88-286c90d09afd)
+
+#### After
+![image](https://github.com/user-attachments/assets/28ec80b9-d1eb-47fe-83e0-39faf34b056a)
+
+
 ### Roadmap
 
 - **✅ Current Features:**
