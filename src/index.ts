@@ -1,11 +1,12 @@
 import { logger } from "./config";
 import { getDirectory, getOptions } from "./prompts";
 import { getConversionOptions } from "./prompts/conversion-options";
-import { traverseDirectory } from "./utils";
+import { findFile, traverseDirectory } from "./utils";
 import type {
   SupportedFileExtensions,
   SupportedFileExtensionsUppercase,
 } from "./types";
+import { instalTypescriptTypes } from "./utils/ts";
 
 const contructFileExtsRegex = (
   exts: SupportedFileExtensions[] | SupportedFileExtensionsUppercase[]
@@ -18,8 +19,11 @@ const contructFileExtsRegex = (
 
 async function start() {
   const targetDir = await getDirectory();
-  const { convertFrom, convertTo, installTypes, createInterfaces, addTyping } =
-    await getConversionOptions();
+  const {
+    convertFrom,
+    convertTo,
+    installTypes /* createInterfaces, addTyping */,
+  } = await getConversionOptions();
   const { backupsEnabled, loggingEnabled } = await getOptions();
 
   const fileRegex = contructFileExtsRegex(convertFrom);
@@ -32,6 +36,8 @@ async function start() {
       `Starting conversion of ${convertFromStr} -> ${convertTo} in directory: ${targetDir}`
     );
   }
+
+  if (installTypes) instalTypescriptTypes(targetDir, loggingEnabled);
 
   await traverseDirectory(
     targetDir,

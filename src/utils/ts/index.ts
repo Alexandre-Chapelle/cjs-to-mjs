@@ -1,0 +1,1 @@
+export { instalTypescriptTypes } from "./installTypes";

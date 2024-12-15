@@ -5,6 +5,17 @@ import type { SupportedFileExtensions } from "../types";
 import { logger } from "../config";
 import { convertToEsm, convertToTs, convertToCjs } from "./modules";
 
+const defaultExcludedDirs: Set<string> = new Set([
+  "node_modules",
+  ".vscode",
+  ".git",
+  "dist",
+  "build",
+  "out",
+  ".idea",
+  ".DS_Store",
+]);
+
 const convertFeatureMapper: Record<
   SupportedFileExtensions,
   (filePath: string) => string
@@ -50,7 +61,9 @@ export async function traverseDirectory(
   loggingEnabled: boolean,
   fileRegex: RegExp,
   convertTo: SupportedFileExtensions,
-  backupsEnabled: boolean
+  backupsEnabled: boolean,
+  excludedDirs: Set<string> = defaultExcludedDirs,
+  skipHiddenDirs: boolean = true
 ) {
   const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
 
@@ -59,12 +72,26 @@ export async function traverseDirectory(
     const fullPath = path.join(dirPath, entryName);
 
     if (entry.isDirectory()) {
+      if (excludedDirs.has(entryName)) {
+        if (loggingEnabled)
+          logger.info(`Skipping excluded directory: ${fullPath}`);
+        continue;
+      }
+
+      if (entryName.startsWith(".") && skipHiddenDirs) {
+        if (loggingEnabled)
+          logger.info(`Skipping hidden directory: ${fullPath}`);
+        continue;
+      }
+
       await traverseDirectory(
         fullPath,
         loggingEnabled,
         fileRegex,
         convertTo,
-        backupsEnabled
+        backupsEnabled,
+        excludedDirs,
+        skipHiddenDirs
       );
     } else if (entry.isFile() && fileRegex.test(entryName)) {
       if (loggingEnabled) logger.info(`Processing file: ${fullPath}`);
@@ -89,4 +116,24 @@ export async function traverseDirectory(
       }
     }
   }
+}
+
+export async function findFile(
+  dirPath: string,
+  targetFileName: string,
+  loggingEnabled: boolean
+): Promise<string | null> {
+  const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const entryName = entry.name;
+    const fullPath = path.join(dirPath, entryName);
+
+    if (entry.isDirectory()) findFile(fullPath, targetFileName, loggingEnabled);
+    else if (entry.isFile() && entryName === targetFileName) {
+      return fullPath;
+    }
+  }
+
+  return null;
 }

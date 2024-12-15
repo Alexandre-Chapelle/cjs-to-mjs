@@ -74,18 +74,18 @@ export async function getConversionOptions(): Promise<ConversionOptions> {
           "Do you want me to automatically install types for your project (from package.json)?",
         default: false,
       },
-      {
-        type: "confirm",
-        name: "createInterfaces",
-        message: "Do you want me to create class interfaces for you?",
-        default: false,
-      },
-      {
-        type: "confirm",
-        name: "addTyping",
-        message: "Do you want me to try to add typing to your modules?",
-        default: false,
-      },
+      // {
+      //   type: "confirm",
+      //   name: "createInterfaces",
+      //   message: "Do you want me to create class interfaces for you?",
+      //   default: false,
+      // },
+      // {
+      //   type: "confirm",
+      //   name: "addTyping",
+      //   message: "Do you want me to try to add typing to your modules?",
+      //   default: false,
+      // },
     ]);
 
     Object.assign(conversionOptions, additionalQuestions);

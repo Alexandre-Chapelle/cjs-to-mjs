@@ -8,7 +8,7 @@ export async function getOptions(): Promise<{
     {
       type: "confirm",
       name: "backupsEnabled",
-      message: "Do you want to create backups for each modified file? WIP",
+      message: "Do you want to create backups for each modified file?",
       default: false,
     },
     {

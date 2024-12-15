@@ -1,1 +1,1 @@
-export { traverseDirectory } from "./directory";
+export { traverseDirectory, findFile } from "./directory";
