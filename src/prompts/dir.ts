@@ -7,7 +7,7 @@ export async function getDirectory(): Promise<string> {
     {
       type: "confirm",
       name: "hasScss",
-      message: "Are .js files in this directory?",
+      message: "Are target files in this directory?",
       default: true,
     },
   ]);

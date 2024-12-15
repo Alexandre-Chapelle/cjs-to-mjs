@@ -1,4 +1,5 @@
-export const CJS_FILE_REGEX = /.*\.js$/i;
+import { removeAccidentalSemicolons, sanitizeModuleName } from "./shared";
+
 export const DESTRUCTURED_REQUIRE_REGEX =
   /const\s+\{\s*([a-zA-Z0-9_,\s]+)\s*\}\s*=\s*require\(['"]([^'"]+)['"]\);?/g;
 export const DEFAULT_REQUIRE_REGEX =
@@ -56,14 +57,6 @@ export function replaceExports(
   return `export const ${name} = ${value};`;
 }
 
-function sanitizeModuleName(moduleName: string): string {
-  return moduleName.replace(/[-]/g, "_");
-}
-
-function removeAccidentalSemicolons(value: string) {
-  return value.replace(/;;+/g, ";");
-}
-
 const replacements: Array<{
   regex: RegExp;
   replacer: (...args: any[]) => string;
@@ -94,7 +87,7 @@ const replacements: Array<{
   },
 ];
 
-export function convertCjsToEsm(content: string): string {
+export function convertToTs(content: string): string {
   let transformed = content;
 
   replacements.forEach(({ regex, replacer }) => {

@@ -15,6 +15,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "inquirer": "^12.2.0"
+    "inquirer": "^12.2.0",
+    "mini-ansi-logger": "^1.0.4"
   }
 }
