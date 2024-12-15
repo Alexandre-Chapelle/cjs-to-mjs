@@ -1,5 +1,5 @@
 {
-  "name": "cjs-to-mjs",
+  "name": "unimod",
   "module": "index.ts",
   "type": "module",
   "scripts": {
