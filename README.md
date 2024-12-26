@@ -82,6 +82,8 @@ When you run Unimod, it will prompt you with a series of questions to guide the 
 - **🚧 Upcoming Features:**
   - [ ] Feature to automatically create interfaces for classes when converted to TS
   - [ ] Feature to add automatic typing for the whole project when converted to TS
+  - [ ] Publish as an NPM package
+  - [ ] Suggest changes to file/class/function/var... naming conventions based on the selected option
 
 ### Contributing
 
