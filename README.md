@@ -84,7 +84,7 @@ When you run Unimod, it will prompt you with a series of questions to guide the 
   - [ ] Feature to add automatic typing for the whole project when converted to TS
   - [ ] Publish as an NPM package
   - [ ] Suggest changes to file/class/function/var... naming conventions based on the selected option
-  - [ ] Feature to automatically add public / private modifiers to class propreties / methods based on their name.
+  - [ ] Feature to automatically add public / private modifiers to class properties / methods based on their name.
 
 ### Contributing
 
